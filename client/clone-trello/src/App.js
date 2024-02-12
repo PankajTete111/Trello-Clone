@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { _COLORS } from './Themes/CommonColors/CommonColor';
 import Signup from '../src/screens/SignUp/Signup';
 import Login from './screens/Login/Login';
+
 const  App = (props)=> {
   return (
     <>

@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import "../SignUp/Signup.css";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const Signup = () => {
    const[full_name,setFullName]=useState("");
@@ -8,40 +11,71 @@ const Signup = () => {
    const[password,setPassword]=useState("");
    const[contact_no,setContact]=useState("");
    const navigate=useNavigate("");
-  
+   
    const setdata = async () => {
-    try {
-      const response = await fetch('http://localhost:3050/api/createUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          full_name: full_name,
-          email_id: emailId,
-          password: password,
-          contact_no: contact_no,
-        }),
-      });
+    // try {
+    //   const response = await fetch('http://localhost:3050/api/createUser', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       full_name: full_name,
+    //       email_id: emailId,
+    //       password: password,
+    //       contact_no: contact_no,
+    //     }),
+    //   });
   
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+    //   if (!response.ok) {
+    //     throw new Error('Network response was not ok');
+    //   }
   
-      const responseData = await response.json();
-      console.log('Response from server:', responseData);
-      navigate("/Login");
-    } catch (error) {
-      console.error('Error during fetch:', error);
-    }
+    //   const responseData = await response.json();
+    //   console.log('Response from server:', responseData);
+    //   navigate("/Login");
+    // } catch (error) {
+    //   console.error('Error during fetch:', error);
+    // }
+
+    navigate("/Login");
   };
   
+    //... Regex signup email validation
+    const validationUserEmail = (email) => {
+      const emailPattern =
+        /^(?!\d+@)\w+([-+.']\w+)*@(?!\d+\.)\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+      return emailPattern.test(email);
+    };
+
+  const handlesubmit = () =>{
+    const mobileReg = /^[0-9]+$/;
+    if(full_name.trim() === ''){
+      toast.warn('please enter your name !');
+    }else if(emailId.trim() === ''){
+      toast.warn('please enter your email !');
+    }else if(!validationUserEmail(emailId)){
+      toast.warn("Please enter a valid email !");
+    }else if(password.trim() === ''){
+      toast.warn("Please enter a password !");
+    }else if(contact_no.trim() === ''){
+      toast.warn("Please enter phone number !");
+    }else if(!mobileReg.test(contact_no)){
+      toast.warn("Please enter valid phone number !");
+    }else{
+      setdata();
+      setFullName('');
+      setEmail('');
+      setPassword('');
+      setContact('')
+    }
+  }
 
   return (
     <section className="signup-section">
       <div className="text-center">
       </div>
-      <div className="container mt-3">
+      <div className="container pt-5">
         <div className="row justify-content-center">
           <div className="col-md-6" id="card-main">
             <div className="card mt-0">
@@ -97,6 +131,7 @@ const Signup = () => {
                       Phone Number <span className="star">*</span>
                     </label>
                     <input
+                      maxLength={10}
                       type="number"
                       className="form-control"
                       placeholder="Phone Number"
@@ -106,7 +141,8 @@ const Signup = () => {
                   </div>
                   <button
                     className="btn btn-primary col-12"
-                    onClick={setdata}
+                    // onClick={setdata}
+                    onClick={handlesubmit}
                   >
                     SIGN UP
                   </button>
@@ -116,6 +152,7 @@ const Signup = () => {
           </div>
         </div>
       </div>
+      <ToastContainer className="tost-message" />
     </section>
   );
 };
