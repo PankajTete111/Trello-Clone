@@ -27,9 +27,11 @@ const router = express.Router();
 router.post('/loginUser', LoginController.loginUser);
 router.post('/createUser', UserController.insertUser);
 router.post('/createBoard', UserController.insertBoard);
-router.get('/boardDetails/:usiKey', UserController.getBoardDetails);
 router.post('/createCard', UserController.createCard);
-router.get('/cardDetails/:usiKey', UserController.getCardDetails);
+router.post('/createtask', UserController.insertTask);
+router.get('/boardDetails/:usiKey', UserController.getBoardDetails);
+router.post('/cardDetails', UserController.getCardDetails);
+router.post('/taskDetails', UserController.getTaskDetails);
 router.post(
     '/verify-token',
     LoginController.verifyToken

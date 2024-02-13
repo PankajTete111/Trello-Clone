@@ -38,6 +38,9 @@ class UserController  {
     try {
       const boardDetails = req.body;
       console.log("boardDetails", boardDetails);
+      console.log(req.body.usiKey,"usiKey");
+      console.log(req.body.boardName,"boardName");
+
 
       const results = await UserSignup.createBoard(boardDetails)
       console.log("resultssss", results[0][0]);
@@ -106,10 +109,7 @@ class UserController  {
         cardTitle,
         cardDiscp,
         cardDate,
-        cardLabels,
-        cardTask,
-        createdBy,
-        modifiedBy,
+        cardLabels
       } = req.body;
 
       // Call the model to create a card
@@ -119,10 +119,7 @@ class UserController  {
         cardTitle,
         cardDiscp,
         cardDate,
-        cardLabels,
-        cardTask,
-        createdBy,
-        modifiedBy,
+        cardLabels
       });
 
       const [cardId] = insertedCardId[0][0];
@@ -145,10 +142,12 @@ class UserController  {
   }
   static async getCardDetails(req, res) {
     try {
-      const {usiKey} = req.params;
+      const ubiKey = req.body.ubiKey;
+      const usiKey = req.body.usiKey;
+      // console.log(details.,"detailsCard");
 
       // Call the model to get card details
-      const cardDetails = await UserSignup.getCardDetails(usiKey);
+      const cardDetails = await UserSignup.getCardDetails(ubiKey,usiKey);
 
       return res.status(200).json({
         data:cardDetails,
@@ -162,6 +161,71 @@ class UserController  {
         success: false,
         error: true,
         message: 'Error getting card details',
+      });
+    }
+  }
+
+  static async insertTask(req, res) {
+    try {
+      const taskDetails = req.body;
+      console.log("taskDetails", taskDetails);
+
+      const results = await UserSignup.createTask(taskDetails)
+      console.log("resultssss", results[0][0]);
+
+      // const userid =results[0][0];
+      // console.log(userid.last_inserted_board_id)
+
+      if (results && results.length > 0 && results[0][0].response === "fail") {
+        return res.status(201).json({
+          // id: jobId,
+          message: "Task details already exist",
+        });
+      } else {
+        return res.status(201).json({
+          // BoardId: userid.last_inserted_board_id,
+          success: true,
+          error: false,
+          message: "Task details inserted successfully",
+        });
+      }
+    } catch (error) {
+      console.error("Error inserting Board details:", error);
+      res.status(500).json({
+        success: false,
+        error: true,
+        message: "Error inserting Board details.",
+      });
+    }
+  }
+
+  static async getTaskDetails(req, res) {
+    try {
+      const  usiKey  = req.body.usiKey;
+      const uciKey = req.body.uciKey;
+
+      // Call the model to get board details
+      const taskDetails = await UserSignup.getTaskDetails(usiKey,uciKey);
+      if (taskDetails && taskDetails.length > 0) {
+        return res.status(200).json({
+          data: taskDetails,
+          success: true,
+          error: false,
+          message: 'Task details retrieved successfully',
+        });
+      } else {
+        return res.status(404).json({
+          success: false,
+          error: true,
+          message: 'No Task details found for the provided USI key',
+        });
+      }
+    } catch (error) {
+      console.error('Error getting Task details:', error);
+      res.status(500).json({
+        success: false,
+        error: true,
+        message: 'Error getting task details',
       });
     }
   }
