@@ -78,7 +78,7 @@ const Signup = () => {
       <div className="container pt-5">
         <div className="row justify-content-center">
           <div className="col-md-6" id="card-main">
-            <div className="card mt-0">
+            <div className="signupucard card mt-0">
               <div className="card-header text-center register" id="register">
                 <h3 className="h3_registration">Registration Form</h3>
               </div>

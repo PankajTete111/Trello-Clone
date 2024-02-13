@@ -1,9 +1,15 @@
 .signup-section {
-  background-color: #d3d7d8;
+  background-color: #476187;
+  height: 100vh;
 }
 
 .card {
-  border-radius: 17px;
+  border-radius: 20px;
+}
+.signupucard{
+  background-color: #e5f5f5 !important;
+  box-shadow: #476187;
+  /* opacity: 1px; */
 }
 
 
