@@ -1,9 +1,8 @@
-/* Add these styles to your existing CSS file or create a new one */
 
-/* Container styles */
 .container-boards {
     margin-top: 50px;
-    /* background-color: #3498db; */
+    background: url('../../assets/image/BackgroundKanban.png');
+    background-repeat: no-repeat;
     padding: 20px;
     border-radius: 15px; /* Border radius for the container */
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); Optional: Box shadow for a subtle lift */
@@ -39,5 +38,8 @@
   .btn-primary:hover {
     background-color: #27ae60; /* Darker green on hover */
     border-color: #27ae60; /* Darker green border on hover */
+  }
+  .label-design{
+    background-color: #27ae60;
   }
   
