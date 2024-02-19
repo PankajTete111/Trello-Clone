@@ -77,7 +77,7 @@ class UserController  {
 
       // Call the model to get board details
       const boardDetails = await UserSignup.getBoardDetails(usiKey);
-
+                  console.log(boardDetails,"brd");
       if (boardDetails && boardDetails.length > 0) {
         return res.status(200).json({
           data: boardDetails,

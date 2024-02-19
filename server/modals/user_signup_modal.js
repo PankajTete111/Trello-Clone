@@ -26,11 +26,11 @@ async function createBoard({ usiKey, boardName }) {
 async function getBoardDetails(usiKey) {
   try {
     const sql = 'CALL USP_KANBAN_GET_ALL_BOARD_BY_ID(?)';
-    const [result] = await db.promise().query(sql, [usiKey]);
-
+    const result = await db.promise().query(sql, [usiKey]);
+console.log(result[0],"res");
     // Extract the rows from the result
     const rows = result[0];
-
+  
     return rows;
   } catch (error) {
     console.error('Error getting board details:', error);

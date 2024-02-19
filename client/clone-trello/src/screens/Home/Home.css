@@ -1,16 +1,28 @@
 
 .container-boards {
-    margin-top: 50px;
-    background: url('../../assets/image/BackgroundKanban.png');
+    /* margin-top: 50px; */
+    /* background: url('../../assets/image/BackgroundKanban.png'); */
+    background-color: #37465bd2;
     background-repeat: no-repeat;
-    padding: 20px;
-    border-radius: 15px; /* Border radius for the container */
+    /* padding: 20px; */
+    border-radius: 10px; /* Border radius for the container */
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); Optional: Box shadow for a subtle lift */
   }
   
   /* Board Card styles */
  
-  
+  #board{
+    width: 20rem;
+    height: fit-content;
+  }
+  .bind_card_div{
+    display: flex;
+    overflow: auto;
+    overflow-x: scroll;
+  }
+  .sub_card_div{
+    display: flex;
+  }
   .board-card .border {
     border: 2px solid #34495e; /* Dark border color */
     border-radius: 10px; /* Border radius for the card */
@@ -41,5 +53,11 @@
   }
   .label-design{
     background-color: #27ae60;
+  }
+
+  .card.no-cards {
+    height: 150px; /* Set your preferred default height */
+    border: 1px solid #ddd; /* Optional: Add a border to visually distinguish empty boards */
+    /* Add any other styling for boards without cards */
   }
   
