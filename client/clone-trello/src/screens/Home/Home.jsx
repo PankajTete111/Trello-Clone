@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useParams} from 'react';
 import Board from '../Modal/Board';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Card from '../Modal/Card';
 import "../Home/Home.css"
-// import isEqual from 'lodash/isEqual';
-
+import { useDataContext } from '../../context/State';
+import Lodar from '../../components/Lodar/Lodar';
 
 const Home = () => {
+  const [post, setPost] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
   const [boards, setBoards] = useState([]);
@@ -16,7 +17,12 @@ const Home = () => {
   const [cardDate, setCardDate] = useState('');
   const [card, setCard] = useState([]);
   const [data, setData] = useState([]);
-  
+  // const { user_id, user_name } = useParams();
+  const [isLoading , setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(true); 
+  const {userId,userName} = useDataContext();
+
+
   const onDragEnd = (result) => {
     // TODO: Handle the drag and drop logic here
   };
@@ -31,7 +37,6 @@ const Home = () => {
       cardLabels: "Label1",
     };
 
-    // Make API call using fetch
     fetch('http://localhost:3050/api/v1/createCard', {
       method: 'POST',
       headers: {
@@ -63,7 +68,7 @@ const Home = () => {
   };
 
   const addBoard = (boardName) => {
-    setBoards([...boards, { name: boardName, id: Date.now() }]);
+    setBoards((prevBoards) => [...prevBoards, { name: boardName, id: Date.now() }]);
   };
 
   const getCardDetails = async () => {
@@ -82,6 +87,7 @@ const Home = () => {
       const result = await response.json();
       setCard(result.data);
       console.log("card", card);
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching card details:', error);
     }
@@ -95,9 +101,11 @@ const Home = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3050/api/v1/boardDetails/1');
+        setIsLoading(true);
+        const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${userId}`);
         const responseData = await response.json();
         setData(responseData.data);
+        setIsLoading(false);
         console.log(responseData, "data");
       } catch (error) {
         console.error(error);
@@ -105,7 +113,7 @@ const Home = () => {
     }
 
     fetchData();
-  }, []);
+  }, [userId]);
 
  
 
@@ -248,6 +256,7 @@ const Home = () => {
       </DragDropContext>
     </div>
       </div>
+      {isLoading && <Lodar  visible={isLoading}/>}
     </>
   );
 };

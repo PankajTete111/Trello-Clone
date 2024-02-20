@@ -1,35 +1,60 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { useDataContext } from "../../context/State";
+import Lodar from "../../components/Lodar/Lodar";
 const Login = () => {
   
- 
+ const {setUserId,setUserName} = useDataContext();
  const[emailId,setEmail]=useState("");
  const[password,setPassword]=useState("");
  const navigate=useNavigate("");
- const getData=async(e)=>{
+ const [isLoading , setIsLoading] = useState(false);
+
+const getData = async (e) => {
   e.preventDefault();
-    alert("1")
-    const response = await fetch('http://localhost:3000/api/loginUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-           email:emailId,
-            password:password
-        }),
-      });
-      console.log("res",response)
-      navigate("/Home");
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const responseData = await response.json();
-      console.log('Response from server:', responseData);
-      alert("123333")
-      
-   }
+  setIsLoading(true);
+  try {
+    const response = await fetch('http://localhost:3050/api/v1/loginUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: emailId,
+        password: password
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+
+    const responseData = await response.json();
+   
+    console.log(responseData.user_id,"id");
+    setUserId(responseData.user_id);
+    setUserName(responseData.user_name)
+console.log(responseData.user_name,"name")
+    if (responseData.success) {
+      setTimeout(() => {
+       
+        navigate("/Home");
+        setIsLoading(true);
+      }, 5000);
+    
+    } else {
+      // Handle unsuccessful login
+      // alert('Login failed. Please check your credentials.');
+   
+    }
+  } catch (error) {
+    console.error('Error submitting data:', error);
+    // alert('An error occurred. Please try again later.');
+  }
+  finally{
+    setIsLoading(false);
+  }
+};
 
   return (
     <>
@@ -92,6 +117,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {isLoading && <Lodar visible={isLoading}/>}
     </>
   );
 };

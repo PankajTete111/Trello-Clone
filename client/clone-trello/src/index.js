@@ -5,13 +5,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 // import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/css/all.css';
+import State from './context/State';
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import 'bootstrap/dist/js/bootstrap.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <State>
+      <App /></State>
   </React.StrictMode>
 );
 

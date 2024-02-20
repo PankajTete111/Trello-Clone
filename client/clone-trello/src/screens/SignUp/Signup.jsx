@@ -11,7 +11,7 @@ const Signup = () => {
   
    const setdata = async () => {
     try {
-      const response = await fetch('http://localhost:3050/api/createUser', {
+      const response = await fetch('http://localhost:3050/api/v1/createUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
