@@ -13,8 +13,31 @@ const Signup = () => {
    const navigate=useNavigate("");
    
    const setdata = async () => {
+    try {
+      const response = await fetch('http://localhost:3050/api/v1/createUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name: full_name,
+          email_id: emailId,
+          password: password,
+          contact_no: contact_no,
+        }),
+      });
   
-    navigate("/Login");
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const responseData = await response.json();
+      console.log('Response from server:', responseData);
+      navigate("/Login");
+    } catch (error) {
+      console.error('Error during fetch:', error);
+    }
+
   };
   
     //... Regex signup email validation

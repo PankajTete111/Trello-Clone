@@ -9,10 +9,10 @@ const Login = () => {
   const navigate = useNavigate("");
 
   // Login Api call here ....
-  const getData = async (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
     // alert("1");
-    const response = await fetch("http://localhost:3000/api/loginUser", {
+    const response = await fetch("http://localhost:3050/api/v1/loginUser", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const Login = () => {
       toast.warn("Please enter a password !");
       // alert("Please enter a password !");
     } else {
-      // getData();
+      loginUser();
       setEmail("");
       setPassword("");
       navigate("/Home");
