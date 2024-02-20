@@ -1,4 +1,4 @@
-.signup-section {
+/* .signup-section {
   background-color: #d3d7d8;
 }
 
@@ -38,6 +38,63 @@
   bottom: -5px;
 }
 
+.password-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.gap-3 {
+  gap: 1rem!important;
+}
+.d-flex {
+  display: flex!important;
+} */
+
+.signup-section {
+  background-color: #476187;
+  height: 100vh;
+}
+ 
+.card {
+  border-radius: 20px;
+}
+.signupucard{
+  background-color: #e5f5f5 !important;
+  box-shadow: #476187;
+  /* opacity: 1px; */
+}
+ 
+ 
+.form-control:focus {
+  box-shadow: 1 10 5px rgba(0, 0, 0, 0.3);
+}
+ 
+.form-check-input {
+  width: 1.5vw;
+  height: 3vh;
+  border: 1px solid black;
+}
+ 
+.star {
+  color: red;
+}
+ 
+.input-error {
+  border: 1px solid red;
+}
+ 
+.password-input-container {
+  position: relative;
+}
+ 
+.password-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-70%);
+  cursor: pointer;
+  bottom: -5px;
+}
+ 
 .password-icon svg {
   width: 20px;
   height: 20px;
