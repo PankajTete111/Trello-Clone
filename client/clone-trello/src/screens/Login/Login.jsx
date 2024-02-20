@@ -57,63 +57,6 @@ const Login = () => {
     }
   };
   return (
-    // <div className="" id="login-container">
-    //   <div className="row pt-5 m-0">
-    //     <div className="col-md-12">
-    //       <div className="container d-flex justify-content-center" id="main1">
-    //         <div className="card mt-4 " id="Card">
-    //           <div className="card-body text-center">
-    //             <h3>Login</h3>
-    //             <hr />
-    //             <form className="text-center">
-    //               <div className="d-flex justify-content-center mb-4 mt-5">
-    //                 <input
-    //                   type="email"
-    //                   placeholder="Enter Email"
-    //                   className="form-control"
-    //                   value={emailId}
-    //                   onChange={(e) => setEmail(e.target.value)}
-    //                 />
-    //                 {/* <div className="input-group-text " id="Email">
-    //                     <i className="fas fa-envelope"></i>
-    //                   </div> */}
-    //               </div>
-    //               <div className="d-flex justify-content-center mb-4 mt-2">
-    //                 <input
-    //                   type="password"
-    //                   placeholder="Password"
-    //                   className="form-control"
-    //                   value={password}
-    //                   onChange={(e) => setPassword(e.target.value)}
-    //                 />
-    //                 {/* <div className="input-group-text" id="Password">
-    //                     <i className="fas fa-lock"></i>
-    //                   </div> */}
-    //               </div>
-    //               <div className="text-center"></div>
-    //               <div className="row mt-3">
-    //                 <div className="col-md-offset-10">
-    //                   <button
-    //                     className="btn btn-primary col-md-12"
-    //                     // type="submit"
-    //                     onClick={handlesubmit}
-    //                   >
-    //                     Sign In
-    //                   </button>
-    //                 </div>
-    //                 <div className="col-md-offset-10 mt-3">
-    //                   <p>Don't have an Account?</p>
-    //                 </div>
-    //               </div>
-    //             </form>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    //         <ToastContainer className="tost-message" />
-    // </div>
-
     <section className="signup-section">
       <div className="text-center"></div>
       <div className="container pt-5">
