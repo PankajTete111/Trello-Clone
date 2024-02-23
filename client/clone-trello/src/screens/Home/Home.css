@@ -1,3 +1,9 @@
+.mainlogo{
+  width: 100px;
+  height: 40px;
+
+}
+
 
 .container-boards {
     /* margin-top: 50px; */
@@ -18,7 +24,6 @@
   .bind_card_div{
     display: flex;
     overflow: auto;
-    overflow-x: scroll;
   }
   .sub_card_div{
     display: flex;

@@ -55,5 +55,16 @@ async function verfyToken({token }) {
 	}
   }
 
+  async function updateUserPassword({ email, password }) {
+	try {
+	  const sql = 'CALL USP_KANBAN_UPDATE_USER_PASSWORD(?, ?)';
+	  const result = await db.promise().query(sql, [email, password]);
+	  console.log("result", result[0][0]);
+	  return result[0][0];
+	} catch (error) {
+	  console.error('Error during user password update:', error);
+	  throw error;
+	}
+}
 
-module.exports = { userLogin ,userLoginInfo,verfyToken };
+module.exports = { userLogin ,userLoginInfo,verfyToken, updateUserPassword};

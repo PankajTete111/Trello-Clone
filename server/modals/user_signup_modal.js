@@ -17,7 +17,9 @@ async function createBoard({ usiKey, boardName }) {
   try {
     const sql = 'CALL USP_KANBAN_CREATE_BOARD(?, ?)';
     const [result] = await db.promise().query(sql, [usiKey, boardName]);
+    console.log(result, "ress");
     return result;
+    
   } catch (error) {
     console.error('Error creating board:', error);
     throw error;
@@ -27,7 +29,7 @@ async function getBoardDetails(usiKey) {
   try {
     const sql = 'CALL USP_KANBAN_GET_ALL_BOARD_BY_ID(?)';
     const result = await db.promise().query(sql, [usiKey]);
-console.log(result[0],"res");
+// console.log(result[0],"res");
     // Extract the rows from the result
     const rows = result[0];
   
@@ -115,4 +117,42 @@ async function getTaskDetails(usiKey,uciKey) {
   }
 }
 
-module.exports = {getTaskDetails, createTask, createUser,createBoard,getBoardDetails ,createCard,getCardDetails};
+async function deleteUserCard ({usi_key,ubi_key,card_title}){
+	try {
+		const sql = 'CALL USP_KANBAN_DELETE_CARD(?, ?,?)';
+		const result = await db.promise().query(sql, [usi_key, ubi_key,card_title]);
+		console.log("result", result[0][0]);
+		return result[0][0];
+	  } catch (error) {
+		console.error('Error during user password update:', error);
+		throw error;
+	  }
+
+}
+
+async function editCard ({ uci_key, usi_key,  cardTitle ,cardDiscp ,cardDate, cardLabels}){
+	try {
+		const sql = 'CALL USP_KANBAN_UPDATE_CARD_DETAILS_BY_CARD_ID(?, ?,?,?,?,?)';
+		const result = await db.promise().query(sql, [  uci_key, usi_key,  cardTitle ,cardDiscp ,cardDate, cardLabels]);
+		console.log("result", result[0][0]);
+		return result[0][0];
+	  } catch (error) {
+		console.error('Error during user password update:', error);
+		throw error;
+	  }
+
+}
+async function deleteUserBoard ({usi_key,ubi_key}){
+	try {
+		const sql = 'CALL USP_KANBAN_DELETE_BOARD(?, ?)';
+		const result = await db.promise().query(sql, [usi_key, ubi_key]);
+		console.log("result", result[0][0]);
+		return result[0][0];
+	  } catch (error) {
+		console.error('Error during user password update:', error);
+		throw error;
+	  }
+
+}
+
+module.exports = {deleteUserBoard ,editCard,getTaskDetails, createTask, createUser,createBoard,getBoardDetails ,createCard,getCardDetails ,deleteUserCard};

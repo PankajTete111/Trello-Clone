@@ -38,15 +38,16 @@ class UserController  {
     try {
       const boardDetails = req.body;
       console.log("boardDetails", boardDetails);
-      console.log(req.body.usiKey,"usiKey");
-      console.log(req.body.boardName,"boardName");
+      // console.log(req.body.usiKey,"usiKey");
+      // console.log(req.body.boardName,"boardName");
 
 
       const results = await UserSignup.createBoard(boardDetails)
-      console.log("resultssss", results[0][0]);
+      // console.log("resultssss", results[0][0]);
+      console.log(results.UBI_USI_KEY,"result");
 
-      const userid =results[0][0];
-      console.log(userid.last_inserted_board_id)
+      // const userid =results[0][0];
+      // console.log(userid.last_inserted_board_id,"userId")
 
       if (results && results.length > 0 && results[0][0].response === "fail") {
         return res.status(201).json({
@@ -55,7 +56,8 @@ class UserController  {
         });
       } else {
         return res.status(201).json({
-          BoardId: userid.last_inserted_board_id,
+          USI_KEY: results[0][0].UBI_USI_KEY,
+          BoardId:results[0][0].UBI_KEY,
           success: true,
           error: false,
           message: "Board details inserted successfully",
@@ -77,7 +79,7 @@ class UserController  {
 
       // Call the model to get board details
       const boardDetails = await UserSignup.getBoardDetails(usiKey);
-                  console.log(boardDetails,"brd");
+       console.log(boardDetails,"brd");
       if (boardDetails && boardDetails.length > 0) {
         return res.status(200).json({
           data: boardDetails,
@@ -123,7 +125,7 @@ class UserController  {
       });
 
       const [cardId] = insertedCardId[0][0];
-      console.log("cardId",cardId.last_inserted_card_id)
+      // console.log("cardId",cardId.last_inserted_card_id)
 
       return res.status(201).json({
         cardId:cardId.last_inserted_card_id,
@@ -226,6 +228,88 @@ class UserController  {
         success: false,
         error: true,
         message: 'Error getting task details',
+      });
+    }
+  }
+  static async deleteCard(req, res) {
+    try {
+      const { usi_key, ubi_key, card_title } = req.body;
+  
+      const deleteCardResult = await UserSignup.deleteUserCard({ usi_key, ubi_key,card_title});
+      console.log("deleteCardResult", deleteCardResult[0].result);
+
+      if (deleteCardResult[0].result === 1) {
+        return res.status(200).json({
+          success: true,
+          message: 'card deleted successfully',
+        });
+      } else {
+        // Handle other cases, such as email not found or password update failure
+        return res.status(401).json({
+          success: false,
+          message: 'faild to delete.',
+        });
+      }
+    } catch (error) {
+      console.error('Error during user password update:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
+
+  static async editCard(req, res) {
+    try {
+      const { uci_key, usi_key, cardTitle ,cardDiscp ,cardDate, cardLabels } = req.body;
+  
+      const editCardResult = await UserSignup.editCard({  uci_key, usi_key,  cardTitle ,cardDiscp ,cardDate, cardLabels});
+      console.log("editCardResult", editCardResult[0].result);
+
+      if (editCardResult[0].result === 1) {
+        return res.status(200).json({
+          success: true,
+          message: 'card updated successfully',
+        });
+      } else {
+        // Handle other cases, such as email not found or password update failure
+        return res.status(401).json({
+          success: false,
+          message: 'faild to update.',
+        });
+      }
+    } catch (error) {
+      console.error('Error during update card details:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
+  static async deleteBoard(req, res) {
+    try {
+      const { usi_key, ubi_key } = req.body;
+  
+      const deleteCardResult = await UserSignup.deleteUserBoard({ usi_key, ubi_key});
+      console.log("deleteCardResult", deleteCardResult[0].result);
+
+      if (deleteCardResult[0].result === 1) {
+        return res.status(200).json({
+          success: true,
+          message: 'card deleted successfully',
+        });
+      } else {
+        // Handle other cases, such as email not found or password update failure
+        return res.status(401).json({
+          success: false,
+          message: 'faild to delete.',
+        });
+      }
+    } catch (error) {
+      console.error('Error during user password update:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
       });
     }
   }

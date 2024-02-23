@@ -7,15 +7,19 @@ import Lodar from "../../components/Lodar/Lodar";
 
 
 const Signup = () => {
-   const[full_name,setFullName]=useState("");
-   const[emailId,setEmail]=useState("");
-   const[password,setPassword]=useState("");
-   const[contact_no,setContact]=useState("");
-   const [isLoading, setIsLoading] = useState(false);
+  const [full_name, setFullName] = useState("");
+  const [emailId, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [contact_no, setContact] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-   const navigate=useNavigate("");
-   
-   const setdata = async () => {
+  const navigate = useNavigate("");
+
+  const handleLoginRedirect = () => {
+    navigate("/")
+  }
+
+  const setdata = async () => {
     try {
       const response = await fetch('http://localhost:3050/api/v1/createUser', {
         method: 'POST',
@@ -29,11 +33,11 @@ const Signup = () => {
           contact_no: contact_no,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const responseData = await response.json();
       console.log('Response from server:', responseData);
       setTimeout(() => {
@@ -46,29 +50,29 @@ const Signup = () => {
     }
 
   };
-  
-    //... Regex signup email validation
-    const validationUserEmail = (email) => {
-      const emailPattern =
-        /^(?!\d+@)\w+([-+.']\w+)*@(?!\d+\.)\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-      return emailPattern.test(email);
-    };
 
-  const handlesubmit = () =>{
+  //... Regex signup email validation
+  const validationUserEmail = (email) => {
+    const emailPattern =
+      /^(?!\d+@)\w+([-+.']\w+)*@(?!\d+\.)\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+    return emailPattern.test(email);
+  };
+
+  const handlesubmit = () => {
     const mobileReg = /^[0-9]+$/;
-    if(full_name.trim() === ''){
+    if (full_name.trim() === '') {
       toast.warn('please enter your name !');
-    }else if(emailId.trim() === ''){
+    } else if (emailId.trim() === '') {
       toast.warn('please enter your email !');
-    }else if(!validationUserEmail(emailId)){
+    } else if (!validationUserEmail(emailId)) {
       toast.warn("Please enter a valid email !");
-    }else if(password.trim() === ''){
+    } else if (password.trim() === '') {
       toast.warn("Please enter a password !");
-    }else if(contact_no.trim() === ''){
+    } else if (contact_no.trim() === '') {
       toast.warn("Please enter phone number !");
-    }else if(!mobileReg.test(contact_no)){
+    } else if (!mobileReg.test(contact_no)) {
       toast.warn("Please enter valid phone number !");
-    }else{
+    } else {
       setdata();
       setFullName('');
       setEmail('');
@@ -98,9 +102,9 @@ const Signup = () => {
                     className="form-control"
                     placeholder="Full Name"
                     value={full_name}
-                    onChange={(e)=>setFullName(e.target.value)}
+                    onChange={(e) => setFullName(e.target.value)}
                   />
-                  
+
                   <div className="mb-3">
                     <label htmlFor="" className="form-label">
                       Email <span className="star">*</span>
@@ -110,9 +114,9 @@ const Signup = () => {
                       className="form-control"
                       placeholder="Email"
                       value={emailId}
-                      onChange={(e)=>setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                     />
-                  
+
                   </div>
                   <div className="mb-3">
                     <label htmlFor="" className="form-label">
@@ -121,10 +125,10 @@ const Signup = () => {
                     <div className="password-input-container">
                       <input
                         // type={showPassword ? "text" : "password"}
-                        className="input form-control" 
+                        className="input form-control"
                         placeholder="Password"
                         value={password}
-                        onChange={(e)=>setPassword(e.target.value)}
+                        onChange={(e) => setPassword(e.target.value)}
                       />
                       <div
                         className="password-icon"
@@ -142,7 +146,7 @@ const Signup = () => {
                       className="form-control"
                       placeholder="Phone Number"
                       value={contact_no}
-                      onChange={(e)=>setContact(e.target.value)}
+                      onChange={(e) => setContact(e.target.value)}
                     />
                   </div>
                   <button
@@ -152,6 +156,12 @@ const Signup = () => {
                   >
                     SIGN UP
                   </button>
+                  <p className="mt-2 d-flex justify-content-center">
+                    Already have an Account?{' '}
+                    <span className="text-primary" onClick={handleLoginRedirect} style={{ cursor: 'pointer' }}>
+                      Login
+                    </span>
+                  </p>
                 </div>
               </div>
             </div>

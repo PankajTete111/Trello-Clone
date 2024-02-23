@@ -28,25 +28,27 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Signup from './screens/SignUp/Signup';
 import Login from './screens/Login/Login';
 import Home from './screens/Home/Home';
-import Lodar from './components/Lodar/Lodar';
+import ForgetPassword from './screens/Login/ForgetPassword';
+// import Lodar from './components/Lodar/Lodar';
 const App = () => {
-  const [isLoading , setIsLoading] = useState(false);
-  const fetchData = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 5000); // Simulating a 3-second loading time
-  };
-  useEffect(()=>{
-    fetchData()
-  },[])
+  // const [isLoading , setIsLoading] = useState(false);
+  // const fetchData = () => {
+  //   // setIsLoading(true);
+  //   setTimeout(() => {
+  //     // setIsLoading(false);
+  //   }, 5000); // Simulating a 3-second loading time
+  // };
+  // useEffect(()=>{
+  //   fetchData()
+  // },[])
   return (
     <Router>
-      {isLoading && <Lodar visible={isLoading}/>}
+      {/* {isLoading && <Lodar visible={isLoading}/>} */}
       <Routes>
-        <Route path="/" element={<Signup />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/Home" element={<Home />} />
+        <Route path="/" element={< Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/forgetPassword" element={<ForgetPassword/>}/>
       </Routes>
     </Router>
   );

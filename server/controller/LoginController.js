@@ -261,6 +261,34 @@ class LoginController {
       });
     }
   }
+
+  static async updatePassword(req, res) {
+    try {
+      const { email, password } = req.body;
+  
+      const updatePaswordResult = await userLogin.updateUserPassword({ email, password });
+      // console.log("updatePasswordResult", updatePaswordResult[0].message);
+
+      if (updatePaswordResult && updatePaswordResult[0].message === 1) {
+        return res.status(200).json({
+          success: true,
+          message: 'Password updated successfully',
+        });
+      } else {
+        // Handle other cases, such as email not found or password update failure
+        return res.status(401).json({
+          success: false,
+          message: 'Please check your email id.',
+        });
+      }
+    } catch (error) {
+      console.error('Error during user password update:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
 }
 
 module.exports = LoginController;
