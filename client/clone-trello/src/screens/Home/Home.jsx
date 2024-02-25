@@ -269,7 +269,6 @@ const Home = () => {
 
   }
 
-
   const handleLogout = () => {
     navigate('/');
     // setIsLoading(true)
@@ -441,10 +440,10 @@ const Home = () => {
                                     <h4 style={{ paddingLeft: "20px" }}>{item.UCI_CARD_LABELS}</h4>
                                     <div className='d-flex p-2 m-1'>
                                       <div className='label-design m-1 p-2'>
-                                        Work
+                                       
                                       </div>
                                       <div className='label-design m-1 p-2'>
-                                        Work
+                                      
                                       </div>
                                     </div>
                                   </div>
