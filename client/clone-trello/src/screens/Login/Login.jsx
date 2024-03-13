@@ -47,7 +47,7 @@ const Login = () => {
         toast.success("Login successful");
         setUserId(responseData.user_id);
         setUserName(responseData.user_name);
-        setUserIdCookie(responseData.user_id);
+        setUserIdCookie(responseData.user_id,responseData.user_name);
         navigate("/Home"); // Only navigate when login is successful
       } else {
     

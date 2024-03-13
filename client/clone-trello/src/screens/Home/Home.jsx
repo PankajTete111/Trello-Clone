@@ -8,7 +8,8 @@ import { getUserIdCookie } from '../Login/Cookie';
 import { Dropdown } from "react-bootstrap";
 // import Lodar from '../../components/Lodar/Lodar';
 import logo from "../../assets/image/logo-light.png"
-
+import Cookies from 'js-cookie';
+import "../Home/Home.css";
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [boards, setBoards] = useState([]);
@@ -26,7 +27,10 @@ const Home = () => {
   const modalTitle = modalMode === "add" ? "Add Card" : "Edit Card";
 
   const id = getUserIdCookie();
-  console.log(id, "id")
+  const userId = Cookies.get("userId");
+  const userName = Cookies.get("userName");
+  // console.log(userId, "id");
+  // console.log(userName, "userName");
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -85,7 +89,9 @@ const Home = () => {
       .then(() => { 
         const getBoardDetails = async () => {
           try {
-            const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id}`);
+            const url=`http://localhost:3050/api/v1/boardDetails/${userId}`;
+            // console.log(url,"url")
+            const response = await fetch(url);
             const responseData = await response.json();
             setData(responseData.data);
             console.log(responseData.data[0], "board data");
@@ -119,7 +125,9 @@ const Home = () => {
   useEffect(() => {
     const getBoardDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id}`);
+        const url=`http://localhost:3050/api/v1/boardDetails/${userId}`;
+        console.log(url,"url")
+        const response = await fetch(url);
         const responseData = await response.json();
         setData(responseData.data);
         console.log(responseData.data[0], "board data");
@@ -364,7 +372,11 @@ const Home = () => {
               <img className='mainlogo' src={logo} alt="Logo" />
             </a>
             <div className='d-flex'>
+                <h6 className='m-2 p-1'>Welcome {userName}</h6>
+
               <a className='navbar-brand' href='#'>
+                
+                
                 <button className='btn btn-primary mr-2' onClick={openModal}>
                   Add Board
                 </button>
