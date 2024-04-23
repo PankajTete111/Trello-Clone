@@ -110,8 +110,7 @@ class UserController  {
         ubiKey,
         cardTitle,
         cardDiscp,
-        cardDate,
-        cardLabels
+        cardDate
       } = req.body;
 
       // Call the model to create a card
@@ -120,8 +119,7 @@ class UserController  {
         ubiKey,
         cardTitle,
         cardDiscp,
-        cardDate,
-        cardLabels
+        cardDate
       });
 
       const [cardId] = insertedCardId[0][0];
@@ -204,10 +202,11 @@ class UserController  {
   static async getTaskDetails(req, res) {
     try {
       const  usiKey  = req.body.usiKey;
+      const  ubiKey  = req.body.ubiKey;
       const uciKey = req.body.uciKey;
 
       // Call the model to get board details
-      const taskDetails = await UserSignup.getTaskDetails(usiKey,uciKey);
+      const taskDetails = await UserSignup.getTaskDetails(usiKey,ubiKey,uciKey,);
       if (taskDetails && taskDetails.length > 0) {
         return res.status(200).json({
           data: taskDetails,
@@ -297,6 +296,33 @@ class UserController  {
         return res.status(200).json({
           success: true,
           message: 'card deleted successfully',
+        });
+      } else {
+        // Handle other cases, such as email not found or password update failure
+        return res.status(401).json({
+          success: false,
+          message: 'faild to delete.',
+        });
+      }
+    } catch (error) {
+      console.error('Error during user password update:', error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal server error',
+      });
+    }
+  }
+  static async deleteTask(req, res) {
+    try {
+      const uct_id  = req.body.uct_id;
+  console.log(uct_id,"contrr");
+      const deleteCardResult = await UserSignup.deleteUserTask(uct_id);
+      console.log("deleteCardResult", deleteCardResult);
+
+      if (deleteCardResult) {
+        return res.status(200).json({
+          success: true,
+          message: 'Task deleted successfully',
         });
       } else {
         // Handle other cases, such as email not found or password update failure

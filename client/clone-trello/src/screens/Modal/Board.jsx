@@ -21,14 +21,17 @@ const Board = ({ showModal, closeModal, reloadBoardDetails }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          usiKey: id,
+          usiKey: id.userId,
           boardName: boardName,
         }),
+       
       });
 
        await response.json();
       
       closeModal();
+      console.log(id);
+      console.log(boardName);
       navigate("/Home");
       console.log("navigated");
       window.location.reload();

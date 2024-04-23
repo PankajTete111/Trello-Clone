@@ -25,6 +25,7 @@ async function createBoard({ usiKey, boardName }) {
     throw error;
   }
 }
+
 async function getBoardDetails(usiKey) {
   try {
     const sql = 'CALL USP_KANBAN_GET_ALL_BOARD_BY_ID(?)';
@@ -45,18 +46,16 @@ async function createCard({
   ubiKey,
   cardTitle,
   cardDiscp,
-  cardDate,
-  cardLabels
+  cardDate
 }) {
   try {
-    const sql = 'CALL USP_KANBAN_CREATE_CARD(?, ?,?, ?, ?, ?)';
+    const sql = 'CALL USP_KANBAN_CREATE_CARD(?, ?,?, ?, ?)';
     const result = await db.promise().query(sql, [
       usiKey,
       ubiKey,
       cardTitle,
       cardDiscp,
-      cardDate,
-      cardLabels
+      cardDate
     ]);
 
 
@@ -84,14 +83,16 @@ async function getCardDetails(ubiKey, usiKey ) {
 async function createTask({
   usiKey,
   ubiKey,
+  uciKey,
   taskName
 }) {
   try {
-    const sql = 'CALL USP_KANBAN_CREATE_TASK(?, ?,?)';
+    const sql = 'CALL USP_KANBAN_CREATE_TASK(?, ? , ? , ?)';
     const result = await db.promise().query(sql, [
-      usiKey,
-  ubiKey,
-  taskName
+    usiKey,
+    ubiKey,
+    uciKey,
+    taskName
     ]);
 
 
@@ -102,11 +103,11 @@ async function createTask({
   }
 }
 
-async function getTaskDetails(usiKey,uciKey) {
+async function getTaskDetails(usiKey,ubiKey,uciKey) {
   // console.log(usiKey,uciKey,"===modal");
   try {
-    const sql = 'CALL USP_KANBAN_GET_ALL_TASK_BY_CARD_ID(?,?)';
-    const result = await db.promise().query(sql, [usiKey, uciKey]);
+    const sql = 'CALL USP_KANBAN_GET_ALL_TASK_BY_CARD_ID(?,?,?)';
+    const result = await db.promise().query(sql, [usiKey,ubiKey,uciKey]);
 
   //  console.log(result[0]);
 
@@ -155,4 +156,18 @@ async function deleteUserBoard ({usi_key,ubi_key}){
 
 }
 
-module.exports = {deleteUserBoard ,editCard,getTaskDetails, createTask, createUser,createBoard,getBoardDetails ,createCard,getCardDetails ,deleteUserCard};
+async function deleteUserTask (uct_id){
+  console.log(uct_id)
+	try {
+		const sql = 'CALL USP_KANBAN_DELETE_TASK_BY_TASK_ID(?)';
+		const result = await db.promise().query(sql, [uct_id]);
+		// console.log("result", result[0]);
+		return result;
+	  } catch (error) {
+		console.error('Error during user password update:', error);
+		throw error;
+	  }
+
+}
+
+module.exports = {deleteUserTask,deleteUserBoard ,editCard,getTaskDetails, createTask, createUser,createBoard,getBoardDetails ,createCard,getCardDetails ,deleteUserCard};

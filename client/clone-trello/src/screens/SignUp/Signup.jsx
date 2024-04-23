@@ -41,10 +41,10 @@ const Signup = () => {
       const responseData = await response.json();
       console.log('Response from server:', responseData);
       setTimeout(() => {
-        navigate("/Login");
+        navigate("/");
         setIsLoading(true);
       }, 2000);
-      // navigate("/Login");
+      // navigate("/");
     } catch (error) {
       console.error('Error during fetch:', error);
     }
@@ -124,7 +124,7 @@ const Signup = () => {
                     </label>
                     <div className="password-input-container">
                       <input
-                        // type={showPassword ? "text" : "password"}
+                        type="password"
                         className="input form-control"
                         placeholder="Password"
                         value={password}

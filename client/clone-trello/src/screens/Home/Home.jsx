@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useParams } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import Board from '../Modal/Board';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -10,27 +11,30 @@ import { Dropdown } from "react-bootstrap";
 import logo from "../../assets/image/logo-light.png"
 import Cookies from 'js-cookie';
 import "../Home/Home.css";
+
+
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
+  const [taskModal, setShowTaskModal] = useState(false);
   const [boards, setBoards] = useState([]);
   const [cardName, setCardName] = useState('');
   const [cardDescription, setCardDescription] = useState('');
-  const [tasks, setTasks] = useState('');
+  const [tasks, setTasks] = useState([]);
   const [cardDate, setCardDate] = useState('');
   const [data, setData] = useState([]);
   const [boardId, setBoardId] = useState();
-  //  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [modalMode, setModalMode] = useState("add"); // "add" or "edit"
   const [selectedCard, setSelectedCard] = useState(null);
-
+  const [length, setLength] = useState("");
   const modalTitle = modalMode === "add" ? "Add Card" : "Edit Card";
+  const [tasksName, setTasksName] = useState('');
+  const handleCloseTaskModal = () => setShowTaskModal(false);
+  const handleShowTaskModal = () => setShowTaskModal(true);
 
   const id = getUserIdCookie();
   const userId = Cookies.get("userId");
   const userName = Cookies.get("userName");
-  // console.log(userId, "id");
-  // console.log(userName, "userName");
   const onDragEnd = (result) => {
     if (!result.destination) {
       return;
@@ -66,12 +70,11 @@ const Home = () => {
 
   const saveCardDetails = () => {
     const requestData = {
-      usiKey: id,
+      usiKey: id.userId,
       ubiKey: boardId,
       cardTitle: cardName,
       cardDiscp: cardDescription,
-      cardDate: cardDate,
-      cardLabels: tasks,
+      cardDate: cardDate
     };
 
     fetch('http://localhost:3050/api/v1/createCard', {
@@ -83,24 +86,22 @@ const Home = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('API response:', data);
         setShowModal(false);
       })
-      .then(() => { 
+      .then(() => {
         const getBoardDetails = async () => {
           try {
-            const url=`http://localhost:3050/api/v1/boardDetails/${userId}`;
+            const url = `http://localhost:3050/api/v1/boardDetails/${userId}`;
             // console.log(url,"url")
             const response = await fetch(url);
             const responseData = await response.json();
             setData(responseData.data);
-            console.log(responseData.data[0], "board data");
           } catch (error) {
             console.error('Error fetching board details:', error);
           }
         };
 
-        getBoardDetails(); 
+        getBoardDetails();
       })
       .catch(error => {
         console.error('Error submitting data:', error);
@@ -125,21 +126,19 @@ const Home = () => {
   useEffect(() => {
     const getBoardDetails = async () => {
       try {
-        const url=`http://localhost:3050/api/v1/boardDetails/${userId}`;
-        console.log(url,"url")
+        const url = `http://localhost:3050/api/v1/boardDetails/${userId}`;
         const response = await fetch(url);
         const responseData = await response.json();
         setData(responseData.data);
-        console.log(responseData.data[0], "board data");
       } catch (error) {
         console.error('Error fetching board details:', error);
       }
     };
     getBoardDetails();
-  }, [id])
+    // getTask();
+  }, [])
 
   const handleCreateCard = () => {
-
     if (modalMode === "add") {
       saveCardDetails();
     }
@@ -153,13 +152,13 @@ const Home = () => {
     try {
       const requestData = {
         uci_key: cardid,
-        usi_key: id,
+        usi_key: id.userId,
         cardTitle: cardName,
         cardDiscp: cardDescription,
         cardDate: cardDate,
         cardLabels: tasks,
       };
-    
+
       const updateResponse = await fetch('http://localhost:3050/api/v1/updatecard', {
         method: 'PUT',
         headers: {
@@ -167,13 +166,11 @@ const Home = () => {
         },
         body: JSON.stringify(requestData),
       });
-  
-      
+
+
       if (updateResponse.ok) {
-        console.log('API response:', updateResponse);
+        // console.log('API response:', updateResponse);
         setShowModal(false);
-  
-       
         await getBoardDetails();
       } else {
         console.error('Error updating data:', updateResponse.statusText);
@@ -182,14 +179,13 @@ const Home = () => {
       console.error('Error updating data:', error);
     }
   };
-  
-  
+
   const getBoardDetails = async () => {
     try {
-      const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id}`);
+      const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id.userId}`);
       const responseData = await response.json();
       setData(responseData.data);
-      console.log(responseData.data[0], "board data");
+      // console.log(responseData.data[0], "board data");
     } catch (error) {
       console.error('Error fetching board details:', error);
     }
@@ -197,9 +193,9 @@ const Home = () => {
 
   const handleDelete = (item) => {
     const { UCI_KEY, UCI_UBI_KEY, UCI_CARD_TITLE } = item;
-    console.log("iddelded", id);
+    console.log("userIdinDelete", id);
     const requestData = {
-      usi_key: parseInt(id),
+      usi_key: parseInt(id.userId),
       ubi_key: UCI_UBI_KEY,
       card_title: UCI_CARD_TITLE,
     };
@@ -213,16 +209,14 @@ const Home = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('API response:', data);
         setShowModal(false);
       })
       .then(() => { // Fix: Add an anonymous function here
         const getBoardDetails = async () => {
           try {
-            const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id}`);
+            const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id.userId}`);
             const responseData = await response.json();
             setData(responseData.data);
-            console.log(responseData.data[0], "board data");
           } catch (error) {
             console.error('Error fetching board details:', error);
           }
@@ -236,12 +230,12 @@ const Home = () => {
   };
 
   const handleDeleteBoard = (item) => {
-    console.log(item, "ubi");
-    console.log(id, "usi");
+    // console.log(item, "ubi");
+    // console.log(id.userId, "usi");
     // const { UCI_KEY, UCI_UBI_KEY, UCI_CARD_TITLE } = item;
     // console.log("iddelded", id);
     const requestData = {
-      usi_key: parseInt(id),
+      usi_key: parseInt(id.userId),
       ubi_key: item
     };
 
@@ -254,16 +248,17 @@ const Home = () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('API response:', data);
+        // console.log('API response:', data);
         setShowModal(false);
       })
       .then(() => { // Fix: Add an anonymous function here
         const getBoardDetails = async () => {
           try {
-            const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id}`);
+            // console.log(id, "id in deleteBoard");
+            const response = await fetch(`http://localhost:3050/api/v1/boardDetails/${id.userId}`);
             const responseData = await response.json();
             setData(responseData.data);
-            console.log(responseData.data[0], "board data");
+            // console.log(responseData.data[0], "board data");
           } catch (error) {
             console.error('Error fetching board details:', error);
           }
@@ -283,22 +278,104 @@ const Home = () => {
   };
 
   const handleEdit = (cardid) => {
-    console.log(cardid, "sdsds");
-   
+    // console.log(cardid, "sdsds");
     const selectedCard = data[1].find((item) => item.UCI_KEY === cardid);
-    console.log(selectedCard, "selectedCard");
+    // console.log(selectedCard, "selectedCard");
 
     setModalMode("edit");
+    setBoardId(selectedCard.ubiKey);
     setSelectedCard(selectedCard);
-
+    // setCardId(cardid);
     setCardName(selectedCard.UCI_CARD_TITLE || "");
     setCardDescription(selectedCard.UCI_CARD_DESCRIPTION || "");
-    setTasks(selectedCard.UCI_CARD_LABELS || ""); 
-    console.log(selectedCard.UCI_CARD_LABELS,"selectedCard.UCI_CARD_LABELS");
+    setTasks(selectedCard.UCI_CARD_LABELS || "");
+    console.log(selectedCard.UCI_CARD_LABELS, "selectedCard.UCI_CARD_LABELS");
     setCardDate(selectedCard.UCI_CARD_DATE || "");
 
     // Call the updateCardDetails function when editing
     // updateCardDetails(cardid);
+  };
+
+  const getTask = async (cardid) => {
+    // console.log("after add task");
+    // console.log("after boardId", boardId);
+    // console.log("after boardId", cardid);
+    // console.log(cardid, "cardid");
+
+    try {
+      const requestDataTask = {
+        usiKey: id.userId,
+        ubiKey: boardId,
+        uciKey: cardid
+      };
+      // console.log('getTask created requestDataTask:', requestDataTask);
+      // console.log("after boardId", boardId);
+      // console.log(cardid, "cardid");
+
+      const response = await fetch('http://localhost:3050/api/v1/taskDetails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestDataTask),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('getTask created successfully:', data);
+
+        // Update tasks state with the array of tasks from the response
+        setTasks(data.data);
+
+        // Optionally, set the length of tasks if needed
+        setLength(data.data.length);
+
+        // console.log(length, "llllll");
+        // console.log(tasks, "tasks");
+        // console.log(data.data, "data");
+      } else {
+        console.error('Failed to retrieve tasks:', response.statusText);
+        // Handle error response
+      }
+    } catch (error) {
+      console.error('Error getting task:', error);
+      // Handle any network errors or other exceptions
+    }
+  };
+
+  const insertTask = async (cardid) => {
+
+    try {
+      const requestDataTask = {
+        usiKey: id.userId,
+        ubiKey: boardId,
+        uciKey: cardid,
+        taskName: tasksName
+      };
+      // console.log(boardId, "bid");
+      // console.log(requestDataTask, "reqdasta");
+      const response = await fetch('http://localhost:3050/api/v1/createtask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestDataTask),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // console.log('Task created successfully:', data);
+        setTasksName("");
+        // Handle any further actions after task creation
+        getTask(cardid);
+      } else {
+        console.error('Failed to create task:', response.statusText);
+        // Handle error response
+      }
+    } catch (error) {
+      console.error('Error creating task:', error);
+      // Handle any network errors or other exceptions
+    }
   };
 
 
@@ -331,17 +408,6 @@ const Home = () => {
                 value={cardDescription}
                 onChange={(e) => setCardDescription(e.target.value)}
               />
-              <label htmlFor="cardName" className="form-label">Add Task:</label>
-              <div className='d-flex justify-content-between'>
-                <input
-                  type="text"
-                  className="form-control w-75"
-                  id="carddName"
-                  value={tasks}
-                  onChange={(e) => setTasks(e.target.value)}
-                />
-                <button className='btn btn-primary'>Add</button>
-              </div>
               <label htmlFor="cardName" className="form-label">Card Date:</label>
               <div>
                 <input type="date" cardDate value={cardDate} onChange={(e) => setCardDate(e.target.value)}></input>
@@ -372,11 +438,9 @@ const Home = () => {
               <img className='mainlogo' src={logo} alt="Logo" />
             </a>
             <div className='d-flex'>
-                <h6 className='m-2 p-1'>Welcome {userName}</h6>
+              <h6 className='m-2 p-1'>Welcome {userName}</h6>
 
               <a className='navbar-brand' href='#'>
-                
-                
                 <button className='btn btn-primary mr-2' onClick={openModal}>
                   Add Board
                 </button>
@@ -405,7 +469,7 @@ const Home = () => {
                         <div className=" p-3 d-flex justify-content-between ">
                           {board.UBI_BOARD_NAME}
                           <div>
-                            
+
                             <button className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onClick={() => {
                               setBoardId(board.UBI_KEY);
                               setModalMode("add");
@@ -431,8 +495,6 @@ const Home = () => {
                                   >
                                     <div className='p-2 d-flex justify-content-between'>
                                       <h3>{item.UCI_CARD_TITLE}</h3>
-                                      {/* <p>{item.UCI_CREATED_ON.formateDate()}</p> */}
-                                      {/* <p>{new Date(item.UCI_CREATED_ON).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p> */}
                                       <p>{new Date(item.UCI_CREATED_ON).toLocaleDateString()}</p>
 
                                       <Dropdown>
@@ -445,18 +507,45 @@ const Home = () => {
                                           <Dropdown.Item onClick={() => handleDelete(item)}>Delete Card</Dropdown.Item>
                                         </Dropdown.Menu>
                                       </Dropdown>
-                                    </div>
-                                    <div className='p-1 border-bottom'>
-                                      <h5>{item.UCI_CARD_DESCRIPTION}</h5>
-                                    </div>
-                                    <h4 style={{ paddingLeft: "20px" }}>{item.UCI_CARD_LABELS}</h4>
-                                    <div className='d-flex p-2 m-1'>
-                                      <div className='label-design m-1 p-2'>
-                                       
+                                      <Button className='btn btn-primary' onClick={handleShowTaskModal}>Add Task</Button>
+                                      <div>
+                                        <Modal show={taskModal} onHide={handleCloseTaskModal}>
+                                          <Modal.Header closeButton>
+                                            <Modal.Title>Add Task</Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            <input
+                                              type="text"
+                                              className="form-control"
+                                              placeholder="Enter task name"
+                                              value={tasksName}
+                                              onChange={(e) => setTasksName(e.target.value)}
+                                            />
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button variant="secondary" onClick={handleCloseTaskModal}>
+                                              Close
+                                            </Button>
+                                            <Button variant="primary" onClick={() => insertTask(item.UCI_KEY)}>
+                                              Add Task
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
                                       </div>
-                                      <div className='label-design m-1 p-2'>
-                                      
-                                      </div>
+                                    </div>
+                                    <div className='p-3 mb-1'>
+                                      {tasks.length === 0 ? (
+                                        <p>{tasks.length === 0 ? 'No tasks found. Add a task.' : ''}</p>
+                                      ) : (
+                                        tasks.map(item => (
+                                          <ul key={item.UCT_TASK_NAME} className='mb-1 d-flex justify-content-between'>
+                                            <li>
+                                              {item.UCT_TASK_NAME}
+                                            </li>
+                                            <i className="fa fa-trash" style={{ cursor: 'pointer', marginLeft: '10px', color: 'red' }}></i>
+                                          </ul>
+                                        ))
+                                      )}
                                     </div>
                                   </div>
                                 )}

@@ -18,6 +18,7 @@ router.post('/taskDetails', UserController.getTaskDetails);
 router.post('/deletecard', UserController.deleteCard);
 router.put('/updatecard', UserController.editCard);
 router.post('/deleteboard', UserController.deleteBoard);
+router.post('/deleteTask', UserController.deleteTask);
 router.post(
     '/verify-token',
     LoginController.verifyToken
