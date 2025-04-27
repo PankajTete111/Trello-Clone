@@ -1,0 +1,68 @@
+.mainlogo{
+  width: 100px;
+  height: 40px;
+
+}
+
+
+.container-boards {
+    /* margin-top: 50px; */
+    background: url('../../assets/image/BackgroundKanban.png');
+    background-color: #37465bd2;
+    background-repeat: no-repeat;
+    /* padding: 20px; */
+    border-radius: 10px; /* Border radius for the container */
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); Optional: Box shadow for a subtle lift */
+  }
+  
+  /* Board Card styles */
+ 
+  #board{
+    width: 20rem;
+    height: fit-content;
+  }
+  .bind_card_div{
+    display: flex;
+    overflow: auto;
+  }
+  .sub_card_div{
+    display: flex;
+  }
+  .board-card .border {
+    border: 2px solid #34495e; /* Dark border color */
+    border-radius: 10px; /* Border radius for the card */
+  }
+  
+  .board-card .border p {
+    margin-bottom: 0; /* Remove default margin for paragraph inside the card */
+  }
+  
+  .board-card button {
+    margin-left: 10px; /* Add space between board name and button */
+  }
+  
+  /* Optional: Hover effect for the card */
+  .board-card .border:hover {
+    border-color: #0e77e0ae; /* Darker border color on hover */
+  }
+  
+  /* Optional: Button styles */
+  .btn-primary {
+    background-color: #2ecc71; /* Green button color */
+    border-color: #2ecc71; /* Green button border color */
+  }
+  
+  .btn-primary:hover {
+    background-color: #27ae60; /* Darker green on hover */
+    border-color: #27ae60; /* Darker green border on hover */
+  }
+  .label-design{
+    background-color: #27ae60;
+  }
+
+  .card.no-cards {
+    height: 150px; /* Set your preferred default height */
+    border: 1px solid #ddd; /* Optional: Add a border to visually distinguish empty boards */
+    /* Add any other styling for boards without cards */
+  }
+  
